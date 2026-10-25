@@ -42,7 +42,8 @@
   let pending=null;try{pending=JSON.parse(localStorage.getItem(pendingKey))}catch{throw Error('تعذّر قراءة نسخة الحفظ المحلي. احتفظ ببيانات المتصفح واطلب المساعدة.')}
   const revision=data?.revision||0;
   if(pending?.dirty&&pending.revision!==revision){recoverConflict(pending);return}
-  const payload=pending?.dirty?JSON.parse(pending.snapshot):data?.payload;
+  let payload=pending?.dirty?JSON.parse(pending.snapshot):data?.payload;
+  if(!payload&&!data){const seed=await client.from('athar_import_package').select('payload').eq('singleton',true).single();if(seed.error)throw Error('تعذّر تحميل قوائم الطلاب المحمية. حاول مجددًا.');payload=window.AtharCreateSeedState(seed.data.payload);}
   if(payload&&!valid(payload))throw Error('بنية البيانات المحفوظة غير صالحة. لم تُستبدل بياناتك.');
   if(payload)localStorage.setItem(storageKey,JSON.stringify(payload));else localStorage.removeItem(storageKey);
   queue=new window.AtharSyncQueue({revision,

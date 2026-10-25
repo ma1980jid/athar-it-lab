@@ -11,4 +11,12 @@
   }
  }
  root.AtharSyncQueue=SyncQueue;
+ root.AtharCreateSeedState=function(seed){
+  if(!Array.isArray(seed?.classes)||!Array.isArray(seed?.curriculum))throw Error('Invalid protected import');
+  let studentId=1000;
+  const empty={id:1,grade:'الثامن',section:'1',name:'الثامن / 1',students:[],groups:[],session:0,pending:[],replacements:{}};
+  return {version:1,classes:[empty,...seed.classes.map((c,i)=>({...c,id:i+2,name:c.grade+' / '+c.section,students:c.students.map(s=>({...s,id:++studentId,absent:false})),groups:[],session:0,pending:[],replacements:{}}))],
+   curriculum:seed.curriculum.map((l,i)=>({...l,id:'imported-lesson-'+i})),events:[],questions:[],approvals:{},attendance:{},lessons:[],imports:[{packageId:seed.packageId||'athar-protected-seed',sources:seed.sources||[],date:new Date().toISOString()}],
+   settings:{school:'مدرسة الشيخ حمدان بن خميس اليوسفي',teacher:'معلم تقنية المعلومات',start:'2026-09-01',mid:'2026-10-31',end:'2026-12-31',topic:'إدخال البيانات',goal:'قراءة المدخلات وتحويلها'}};
+ };
 })(typeof globalThis==='undefined'?window:globalThis);
