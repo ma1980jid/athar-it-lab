@@ -21,6 +21,7 @@ window.ATHAR_CLOUD_CONFIG={
     "lesson-python-intro-content.js",
     "lesson-python-input-content.js",
     "lesson-content-core.js",
-    "lesson-content-ui.js"
+    "lesson-content-ui.js",
+    "quick-cards.js"
   ]
 };
