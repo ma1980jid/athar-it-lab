@@ -51,7 +51,7 @@
    cache:(snapshot,revision,dirty)=>{localStorage.setItem(pendingKey,JSON.stringify({snapshot,revision,dirty}));localStorage.setItem(storageKey,snapshot)},status});
   window.AtharCloud={storageKey,write,flush,loadImport:async()=>{const {data,error}=await client.from('athar_import_package').select('payload').eq('singleton',true).single();if(error)throw Error('تعذّر تحميل قوائم الطلاب المحمية.');return data.payload}};
   commonControls();
-  for(const src of cfg.appScripts){await new Promise((resolve,reject)=>{const script=document.createElement('script');script.src=src;script.onload=resolve;script.onerror=()=>reject(Error('تعذّر تحميل أحد ملفات المنصة؛ أعد تحميل الصفحة.'));document.body.append(script)})}
+  for(const src of cfg.appScripts){await new Promise((resolve,reject)=>{const script=document.createElement('script'),url=new URL(src,location.href);url.searchParams.set('v',cfg.assetVersion||'local');script.src=url.href;script.onload=resolve;script.onerror=()=>reject(Error('تعذّر تحميل أحد ملفات المنصة؛ أعد تحميل الصفحة.'));document.body.append(script)})}
   $('#cloud-account').textContent=user.email;auth.hidden=true;app.hidden=false;$('#cloud-toolbar').hidden=false;status(queue.pending?'pending':'saved');
   if(!data){$('#cloud-welcome').hidden=false;$('#welcome-close').onclick=()=>{$('#cloud-welcome').hidden=true};}
   if(pending?.dirty&&!queue.pending)write(pending.snapshot);await flush();

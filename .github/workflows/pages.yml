@@ -20,6 +20,8 @@ jobs:
         run: |
           node check-cloud.cjs
           for file in site/*.js; do node --check "$file"; done
+      - name: Version published browser assets
+        run: node version-assets.cjs
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
         with:
